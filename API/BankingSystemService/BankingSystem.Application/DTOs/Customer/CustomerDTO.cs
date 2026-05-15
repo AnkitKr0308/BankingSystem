@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BankingSystem.Application.DTOs
+namespace BankingSystem.Application.DTOs.Customer
 {
     public class CustomerDTO
     {

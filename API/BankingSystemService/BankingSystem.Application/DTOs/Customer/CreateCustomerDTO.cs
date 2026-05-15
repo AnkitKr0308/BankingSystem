@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BankingSystem.Domain.Entity
+namespace BankingSystem.Application.DTOs.Customer
 {
-    public class Customer
+    public class CreateCustomerDTO
     {
-        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; }
         public string Address { get; set; }
+        public string ZipCode {  get; set; }
         public string PhoneNumber { get; set; }
-        public int ZipCode { get; set; }
-        public ICollection<BankAccount> BankAccounts { get; set; } = new List<BankAccount>();
+        
     }
 }

@@ -3,6 +3,9 @@ using BankingSystem.Application.Services;
 using BankingSystem.Infrastructure.Data;
 using BankingSystem.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
+using BankingSystem.Application.Validators;
+using BankingSystem.Application.Validators.Account;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,10 +20,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BankingDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BankingSystem")));
 
+
+// Injecting Validators
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddValidatorsFromAssemblyContaining<TransactionValidator>();
+
 // Adding Dependency Injection
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+
 
 var app = builder.Build();
 

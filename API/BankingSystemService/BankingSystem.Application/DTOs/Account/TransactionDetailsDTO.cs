@@ -1,15 +1,16 @@
-﻿using System;
+﻿using BankingSystem.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BankingSystem.Application.DTOs
+namespace BankingSystem.Application.DTOs.Account
 {
-    public class TransactionDTO
+    public class TransactionDetailsDTO
     {
         public decimal Amount { get; set; }
-        public string Type { get; set; } = string.Empty;
+        public TransactionType Type { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

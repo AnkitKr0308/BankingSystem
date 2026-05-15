@@ -1,4 +1,5 @@
-﻿using BankingSystem.Application.Interfaces;
+﻿using BankingSystem.Application.DTOs.Account;
+using BankingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,16 +30,16 @@ namespace BankingSystem.API.Controllers
         }
 
         [HttpPost("{accountId}/deposit")]
-        public async Task<IActionResult> DepositAmount (int accountId, decimal amount)
+        public async Task<IActionResult> DepositAmount (int accountId, [FromBody]CreateTransactionDTO depositDTO)
         {
-            await _accountService.DepositAsync(accountId, amount);
+            await _accountService.DepositAsync(accountId, depositDTO);
             return Ok();
         }
 
         [HttpPost("{accountId}/withdraw")]
-        public async Task<IActionResult> WithdrawAmount(int accountId, decimal amount)
+        public async Task<IActionResult> WithdrawAmount(int accountId, [FromBody] CreateTransactionDTO withdrawDTO)
         {
-            await _accountService.WithdrawAsync(accountId, amount);
+            await _accountService.WithdrawAsync(accountId, withdrawDTO);
             return Ok();
         }
 

@@ -21,7 +21,7 @@ namespace BankingSystem.Infrastructure.Repository
         {
             var account = _context.BankAccounts
                 .Include(a=>a.Customer)
-                .Include(a=>a.Transacations)
+                .Include(a=>a.Transactions)
                 .FirstOrDefaultAsync(a=>a.Id == accountId);
 
             return account;

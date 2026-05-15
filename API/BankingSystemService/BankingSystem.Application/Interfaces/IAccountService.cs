@@ -1,4 +1,4 @@
-﻿using BankingSystem.Application.DTOs;
+﻿using BankingSystem.Application.DTOs.Account;
 using BankingSystem.Domain.Entity;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ namespace BankingSystem.Application.Interfaces
     public interface IAccountService
     {
         Task<AccountDetailsDTO?> GetAccountAsync(int accountId);
-        Task DepositAsync(int accountId, decimal  amount);
-        Task WithdrawAsync (int accountId, decimal amount);
+        Task DepositAsync(int accountId, CreateTransactionDTO transactionDTO);
+        Task WithdrawAsync (int accountId, CreateTransactionDTO transactionDTO);
         Task<BankAccount> CreateAccountAsync(int customerId);
     }
 }

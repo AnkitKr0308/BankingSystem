@@ -29,6 +29,21 @@ namespace BankingSystem.Infrastructure.Data
             modelBuilder.Entity<Transaction>()
                 .Property(x => x.Amount)
                 .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.Property(x => x.Address)
+                .HasMaxLength(250);
+
+                entity.Property(x => x.PhoneNumber)
+                .HasMaxLength(10);
+
+                entity.Property(x => x.ZipCode)
+                .HasMaxLength(6);
+            });
+                
+
+
         }
     }
 }
