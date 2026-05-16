@@ -1,4 +1,5 @@
 ﻿using BankingSystem.Application.DTOs.Account;
+using BankingSystem.Application.DTOs.Transactions;
 using BankingSystem.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,30 +17,30 @@ namespace BankingSystem.API.Controllers
         }
 
         [HttpPost("createaccount")]
-        public async Task<IActionResult> CreateAccount(int customerId)
+        public async Task<IActionResult> CreateAccount([FromBody]CreateAccountDTO createAccountDTO) 
         {
-            var account = await _accountService.CreateAccountAsync(customerId);
+            var account = await _accountService.CreateAccountAsync(createAccountDTO);
             return Ok(account);
         }
 
-        [HttpGet("{accountId}")]
-        public async Task<IActionResult> GetAccountDetail(int accountId)
+        [HttpGet("{accountNumber}")]
+        public async Task<IActionResult> GetAccountDetail(string accountNumber)
         {
-            var account = await _accountService.GetAccountAsync(accountId);
+            var account = await _accountService.GetAccountAsync(accountNumber);
             return Ok(account);
         }
 
-        [HttpPost("{accountId}/deposit")]
-        public async Task<IActionResult> DepositAmount (int accountId, [FromBody]CreateTransactionDTO depositDTO)
+        [HttpPost("deposit")]
+        public async Task<IActionResult> DepositAmount ([FromBody]CreateTransactionDTO depositDTO)
         {
-            await _accountService.DepositAsync(accountId, depositDTO);
+            await _accountService.DepositAsync(depositDTO);
             return Ok();
         }
 
-        [HttpPost("{accountId}/withdraw")]
-        public async Task<IActionResult> WithdrawAmount(int accountId, [FromBody] CreateTransactionDTO withdrawDTO)
+        [HttpPost("withdraw")]
+        public async Task<IActionResult> WithdrawAmount([FromBody] CreateTransactionDTO withdrawDTO)
         {
-            await _accountService.WithdrawAsync(accountId, withdrawDTO);
+            await _accountService.WithdrawAsync(withdrawDTO);
             return Ok();
         }
 

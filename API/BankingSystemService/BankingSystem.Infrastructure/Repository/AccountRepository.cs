@@ -17,12 +17,12 @@ namespace BankingSystem.Infrastructure.Repository
         {
             _context=context;
         }
-        public Task<BankAccount?> GetAccountDetailsAsync(int accountId)
+        public Task<BankAccount?> GetAccountDetailsAsync(string accountNumber)
         {
             var account = _context.BankAccounts
                 .Include(a=>a.Customer)
                 .Include(a=>a.Transactions)
-                .FirstOrDefaultAsync(a=>a.Id == accountId);
+                .FirstOrDefaultAsync(a=>a.AccountNumber == accountNumber);
 
             return account;
         }

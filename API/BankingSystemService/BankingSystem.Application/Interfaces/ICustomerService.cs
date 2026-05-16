@@ -9,8 +9,9 @@ namespace BankingSystem.Application.Interfaces
 {
     public interface ICustomerService
     {
-        Task<CustomerDTO> CreateCustomerAsync(CreateCustomerDTO customer);
-        Task DeleteCustomer(int customerId);
-        Task<CustomerDTO> UpdateCustomer(int customerId, CreateCustomerDTO customer);
+        Task<CustomerDetailsDTO> CreateCustomerAsync(CreateCustomerDTO customer);
+        Task DeleteCustomer(string CustomerId);
+        Task<CustomerDetailsDTO> UpdateCustomer(string CustomerId, CreateCustomerDTO customer);
+        Task<CustomerDetailsDTO> GetCustomerDataAsync(string CustomerId);
     }
 }

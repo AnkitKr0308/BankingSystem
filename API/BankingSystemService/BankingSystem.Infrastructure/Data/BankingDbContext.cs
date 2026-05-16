@@ -22,13 +22,27 @@ namespace BankingSystem.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BankAccount>()
-                .Property(x => x.Balance)
+            modelBuilder.Entity<BankAccount>(entity =>
+            {
+                entity.Property(x => x.Balance)
+                      .HasColumnType("decimal(18,2)");
+
+                entity.Property(x => x.AccountNumber)
+                .IsRequired()
+                .HasDefaultValueSql("NEXT VALUE FOR AccountNumberSequence");
+            });
+
+
+            modelBuilder.Entity<Transaction>(entity =>
+            {
+                entity.Property(x => x.Amount)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Transaction>()
-                .Property(x => x.Amount)
-                .HasColumnType("decimal(18,2)");
+                entity.Property(x=>x.TransactionID)
+                .IsRequired()
+                .HasDefaultValueSql("NEXT VALUE FOR TransactionIdSequence");
+            });
+                
 
             modelBuilder.Entity<Customer>(entity =>
             {
@@ -39,10 +53,24 @@ namespace BankingSystem.Infrastructure.Data
                 .HasMaxLength(10);
 
                 entity.Property(x => x.ZipCode)
-                .HasMaxLength(6);
-            });
-                
+                 .HasMaxLength(6);
 
+                entity.Property(x => x.CustomerId)
+                .HasDefaultValueSql("NEXT VALUE FOR CustomerIdSequence")
+                .IsRequired();
+            });
+
+            modelBuilder.HasSequence<long>("CustomerIdSequence")
+                .StartsAt(100000)
+                .IncrementsBy(1);
+
+            modelBuilder.HasSequence<long>("AccountNumberSequence")
+                .StartsAt(10800000)
+                .IncrementsBy(1);
+
+            modelBuilder.HasSequence<long>("TransactionIdSequence")
+                .StartsAt(100000000)
+                .IncrementsBy(1);
 
         }
     }

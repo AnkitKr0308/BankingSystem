@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(BankingDbContext))]
-    [Migration("20260515182311_RenameTransactionType")]
-    partial class RenameTransactionType
+    [Migration("20260516081916_InitiateMigration")]
+    partial class InitiateMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,15 @@ namespace BankingSystem.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.HasSequence("AccountNumberSequence")
+                .StartsAt(10800000L);
+
+            modelBuilder.HasSequence("CustomerIdSequence")
+                .StartsAt(100000L);
+
+            modelBuilder.HasSequence("TransactionIdSequence")
+                .StartsAt(100000000L);
+
             modelBuilder.Entity("BankingSystem.Domain.Entity.BankAccount", b =>
                 {
                     b.Property<int>("Id")
@@ -35,7 +44,9 @@ namespace BankingSystem.Infrastructure.Migrations
 
                     b.Property<string>("AccountNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValueSql("NEXT VALUE FOR AccountNumberSequence");
 
                     b.Property<int>("AccountType")
                         .HasColumnType("int");
@@ -43,12 +54,12 @@ namespace BankingSystem.Infrastructure.Migrations
                     b.Property<decimal>("Balance")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("customerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("customerId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("BankAccounts");
                 });
@@ -65,6 +76,12 @@ namespace BankingSystem.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValueSql("NEXT VALUE FOR CustomerIdSequence");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -83,9 +100,10 @@ namespace BankingSystem.Infrastructure.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<int>("ZipCode")
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
                         .HasMaxLength(6)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(6)");
 
                     b.HasKey("Id");
 
@@ -100,6 +118,10 @@ namespace BankingSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
@@ -108,6 +130,12 @@ namespace BankingSystem.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionID")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValueSql("NEXT VALUE FOR TransactionIdSequence");
 
                     b.Property<int>("TransactionType")
                         .HasColumnType("int");
@@ -123,7 +151,7 @@ namespace BankingSystem.Infrastructure.Migrations
                 {
                     b.HasOne("BankingSystem.Domain.Entity.Customer", "Customer")
                         .WithMany("BankAccounts")
-                        .HasForeignKey("customerId")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

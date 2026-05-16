@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,11 @@ namespace BankingSystem.Infrastructure.Repository
             _dbSet.Remove(entity);
         }
 
+        public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.FirstOrDefaultAsync(predicate);
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
            return await _dbSet.ToListAsync();
@@ -48,5 +54,7 @@ namespace BankingSystem.Infrastructure.Repository
         {
             _dbSet.Update(entity);
         }
+
+        
     }
 }

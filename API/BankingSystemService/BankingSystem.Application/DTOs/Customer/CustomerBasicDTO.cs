@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace BankingSystem.Application.DTOs.Customer
 {
-    public class CustomerDTO
+    public class CustomerBasicDTO
     {
-        public int Id { get; set; }
+        public string CustomerId { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using BankingSystem.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using BankingSystem.Application.Validators;
-using BankingSystem.Application.Validators.Account;
+using BankingSystem.Application.Validators.Transaction;
 
 var builder = WebApplication.CreateBuilder(args);
 

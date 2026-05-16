@@ -1,4 +1,5 @@
 ﻿using BankingSystem.Application.DTOs.Customer;
+using BankingSystem.Application.DTOs.Transactions;
 using BankingSystem.Domain.Entity;
 using BankingSystem.Domain.Enums;
 using System;
@@ -11,12 +12,12 @@ namespace BankingSystem.Application.DTOs.Account
 {
     public class AccountDetailsDTO
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string AccountNumber { get; set; }
         public BankAccountType AccountType { get; set; }
         public decimal Balance { get; set; }
         
-        public CustomerDTO Customer { get; set; } = new();
+        public CustomerBasicDTO Customer { get; set; } = new();
         public List<TransactionDetailsDTO> Transactions { get; set; } = new();
     }
 }

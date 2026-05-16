@@ -5,24 +5,25 @@
 namespace BankingSystem.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class RenameTransactionType : Migration
+    public partial class UpdatedForeignKeyRelationshipforTransaction : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Type",
-                table: "Transactions",
-                newName: "TransactionType");
+            migrationBuilder.DropColumn(
+                name: "AccountNumber",
+                table: "Transactions");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "TransactionType",
+            migrationBuilder.AddColumn<string>(
+                name: "AccountNumber",
                 table: "Transactions",
-                newName: "Type");
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
     }
 }
