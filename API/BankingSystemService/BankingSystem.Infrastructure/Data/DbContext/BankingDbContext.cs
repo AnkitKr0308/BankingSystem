@@ -5,10 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace BankingSystem.Infrastructure.Data
+using Microsoft.AspNetCore.Identity;
+
+namespace BankingSystem.Infrastructure.Data.DbContext
 {
-    public class BankingDbContext : DbContext
+    public class BankingDbContext : IdentityDbContext<ApplicationUser>
     {
         public BankingDbContext(DbContextOptions<BankingDbContext> options) : base(options) 
         {
@@ -22,6 +25,8 @@ namespace BankingSystem.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<BankAccount>(entity =>
             {
                 entity.Property(x => x.Balance)

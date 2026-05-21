@@ -22,11 +22,11 @@ namespace BankingSystem.Application.Services
         private readonly IValidator<CreateAccountDTO> _accountValidator;
         private readonly ICustomerService _customerService;
         public AccountService(IAccountRepository account, 
-            IRepository<Transaction> transaction, 
-            IValidator<CreateTransactionDTO> transactionValidator,
-            IValidator<CreateAccountDTO> accountValidator,
-            ICustomerService customerService
-        )
+                                IRepository<Transaction> transaction, 
+                                IValidator<CreateTransactionDTO> transactionValidator,
+                                IValidator<CreateAccountDTO> accountValidator,
+                                ICustomerService customerService
+                             )
         {
             _accountRepo = account;
             _transactionRepo = transaction;
@@ -61,7 +61,6 @@ namespace BankingSystem.Application.Services
             {
                 var transaction = new Transaction
                 {
-                    //TransactionID = GenerateTransactionId(),
                     Amount = createAccountDTO.InitialDeposit,
                     TransactionType = TransactionType.Deposit,
                     BankAccountId = account.Id
@@ -168,6 +167,17 @@ namespace BankingSystem.Application.Services
             };
         }
 
+        public async Task DeleteAccount(string accountNumber)
+        {
+            var account = await _accountRepo.GetAccountDetailsAsync(accountNumber);
+
+            if (account == null)
+                throw new KeyNotFoundException($"Account number {accountNumber} not found");
+
+            account.status = Status.Inactive;
+
+            await _accountRepo.SaveChangesAsync();
+        }
        
     }
 }

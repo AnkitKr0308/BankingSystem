@@ -1,6 +1,7 @@
 ﻿using BankingSystem.Application.DTOs.Account;
 using BankingSystem.Application.DTOs.Transactions;
 using BankingSystem.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace BankingSystem.API.Controllers
             _accountService = accountService;
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPost("createaccount")]
         public async Task<IActionResult> CreateAccount([FromBody]CreateAccountDTO createAccountDTO) 
         {
@@ -44,6 +46,13 @@ namespace BankingSystem.API.Controllers
             return Ok();
         }
 
+        [Authorize(Roles ="Admin")]
+        [HttpPatch("deleteAccount")]
+        public async Task<IActionResult> DeleteAccount(string accountNumber)
+        {
+            await _accountService.DeleteAccount(accountNumber);
+            return Ok($"Account {accountNumber} deleted successfully");
+        }
        
     }
 }

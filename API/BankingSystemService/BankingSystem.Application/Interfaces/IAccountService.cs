@@ -15,5 +15,6 @@ namespace BankingSystem.Application.Interfaces
         Task DepositAsync(CreateTransactionDTO transactionDTO);
         Task WithdrawAsync (CreateTransactionDTO transactionDTO);
         Task<AccountDetailsDTO> CreateAccountAsync(CreateAccountDTO createAccountDTO);
+        Task DeleteAccount(string accountNumber);
     }
 }

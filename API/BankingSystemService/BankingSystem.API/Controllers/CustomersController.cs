@@ -24,10 +24,10 @@ namespace BankingSystem.API.Controllers
         }
 
 
-        [HttpDelete("deleteCustomer")]
+        [HttpPatch("deleteCustomer")]
         public async Task<IActionResult> DeleteCustomer([FromQuery]string customerId)
         {
-            await _customerService.DeleteCustomer(customerId);
+            await _customerService.DisableCustomer(customerId);
             return Ok($"Customer {customerId} deleted successfully");
         }
 

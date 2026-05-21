@@ -50,14 +50,14 @@ namespace BankingSystem.Application.Services
             };
         }
 
-        public async Task DeleteCustomer(string customerId)
+        public async Task DisableCustomer(string customerId)
         {
             var customer = await _customer.FirstOrDefaultAsync(x=>x.CustomerId==customerId);
 
             if (customer == null)
                 throw new KeyNotFoundException($"Customer ID {customerId} not found");
 
-            _customer.Delete(customer);
+            customer.status = Status.Inactive;
 
             await _customer.SaveChangesAsync();
         }
@@ -104,9 +104,7 @@ namespace BankingSystem.Application.Services
             customer.Address = customerDTO.Address;
             customer.ZipCode = customerDTO.ZipCode;
             customer.PhoneNumber = customerDTO.PhoneNumber;
-   
 
-            
             await _customer.SaveChangesAsync();
 
             return new CustomerDetailsDTO

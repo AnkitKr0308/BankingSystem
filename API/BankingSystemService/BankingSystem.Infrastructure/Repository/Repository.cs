@@ -1,6 +1,6 @@
 ﻿using BankingSystem.Application.Interfaces;
 using BankingSystem.Domain.Entity;
-using BankingSystem.Infrastructure.Data;
+using BankingSystem.Infrastructure.Data.DbContext;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
