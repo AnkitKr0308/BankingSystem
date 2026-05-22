@@ -11,5 +11,6 @@ namespace BankingSystem.Application.Interfaces
     {
         Task<AuthResponseDTO> RegisterAsync(RegisterDTO register);
         Task<AuthResponseDTO> LoginAsync(LoginDTO login);
+        Task<AuthResponseDTO> RefreshTokenAsync(string refreshToken);
     }
 }

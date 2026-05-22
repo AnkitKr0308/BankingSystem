@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using BankingSystem.Application.Validators;
 using BankingSystem.Application.Validators.Transaction;
-using BankingSystem.Domain.Entity;
 using Microsoft.AspNetCore.Identity;
 using BankingSystem.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -17,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Authentication;
 using BankingSystem.Infrastructure.Data.DbContext;
+using BankingSystem.Domain.Entity.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 

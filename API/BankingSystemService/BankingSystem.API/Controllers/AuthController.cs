@@ -1,10 +1,13 @@
 ﻿using BankingSystem.Application.DTOs.Auth;
+using BankingSystem.Application.Interfaces;
+using BankingSystem.Application.Services;
 using BankingSystem.Domain.Entity;
+using BankingSystem.Domain.Entity.Authentication;
+using BankingSystem.Infrastructure.Data.DbContext;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using BankingSystem.Application.Services;
-using BankingSystem.Application.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
 namespace BankingSystem.API.Controllers
@@ -15,11 +18,13 @@ namespace BankingSystem.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly BankingDbContext _bankingContext;
         
-        public AuthController(IAuthService authService, RoleManager<IdentityRole> roleManager)
+        public AuthController(IAuthService authService, RoleManager<IdentityRole> roleManager, BankingDbContext bankingDbContext)
         {
             _authService = authService;
             _roleManager = roleManager;
+            _bankingContext = bankingDbContext;
         }
 
         [HttpPost("register")]
@@ -43,7 +48,21 @@ namespace BankingSystem.API.Controllers
             {
                 return Unauthorized(result);
             }
-            return Ok(result);
+
+            Response.Cookies.Append("refreshToken", result.RefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+
+            return Ok(new
+            {
+                result.isSuccess,
+                result.Token,
+                result.Message
+            });
         }
 
         [HttpGet("roles")]
@@ -55,6 +74,23 @@ namespace BankingSystem.API.Controllers
                 .ToList();
 
             return Ok(roles);
+        }
+
+        [HttpPost("refreshToken")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(refreshToken))
+                return Unauthorized("No refresh token");
+
+           var result = await _authService.RefreshTokenAsync(refreshToken);
+            if (result == null)
+            {
+                return Unauthorized("Invalid Refresh Token");
+            }
+
+            return Ok(result);
         }
     }
 }

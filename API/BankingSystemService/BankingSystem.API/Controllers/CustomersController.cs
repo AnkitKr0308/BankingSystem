@@ -1,7 +1,10 @@
 ﻿using BankingSystem.Application.DTOs.Customer;
 using BankingSystem.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BankingSystem.API.Controllers
 {
@@ -15,6 +18,7 @@ namespace BankingSystem.API.Controllers
             _customerService = customerService;
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPost("createCustomer")]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerDTO customerDTO)
         {
@@ -23,7 +27,7 @@ namespace BankingSystem.API.Controllers
                 return Ok(customer);           
         }
 
-
+        [Authorize(Roles ="Admin")]
         [HttpPatch("deleteCustomer")]
         public async Task<IActionResult> DeleteCustomer([FromQuery]string customerId)
         {

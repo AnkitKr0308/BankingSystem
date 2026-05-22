@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
-namespace BankingSystem.Domain.Entity
+namespace BankingSystem.Domain.Entity.Authentication
 {
     public class ApplicationUser : IdentityUser
     {
-        public string Email {  get; set; }
-        public string Password { get; set; }
-        public string UserName { get; set; }
+        //public string Email {  get; set; }
+        //public string Password { get; set; }
+        //public string UserName { get; set; }
     }
 }

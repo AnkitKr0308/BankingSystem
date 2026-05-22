@@ -12,5 +12,6 @@ namespace BankingSystem.Application.DTOs.Auth
         //public DateTime Expiration { get; set; }
         public bool isSuccess { get; set; }
         public string Message { get; set; }
+        public string RefreshToken { get; set; }
     }
 }

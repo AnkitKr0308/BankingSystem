@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity;
-using BankingSystem.Domain.Entity;
 using BankingSystem.Tools;
 using System.IO;
+using BankingSystem.Domain.Entity.Authentication;
 
 var builder = Host.CreateApplicationBuilder(args);
 

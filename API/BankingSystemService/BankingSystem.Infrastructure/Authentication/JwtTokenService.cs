@@ -1,4 +1,4 @@
-﻿using BankingSystem.Domain.Entity;
+﻿using BankingSystem.Domain.Entity.Authentication;
 using BankingSystem.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -45,6 +45,14 @@ namespace BankingSystem.Infrastructure.Authentication
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
     }
 }

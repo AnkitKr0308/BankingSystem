@@ -50,6 +50,7 @@ namespace BankingSystem.Application.Services
             };
         }
 
+      
         public async Task DisableCustomer(string customerId)
         {
             var customer = await _customer.FirstOrDefaultAsync(x=>x.CustomerId==customerId);

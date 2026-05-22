@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using Microsoft.AspNetCore.Identity;
+using BankingSystem.Domain.Entity.Authentication;
 
 namespace BankingSystem.Infrastructure.Data.DbContext
 {
@@ -22,6 +23,7 @@ namespace BankingSystem.Infrastructure.Data.DbContext
         public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
 
         public DbSet<Transaction> Transactions=> Set<Transaction>();
+        public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
