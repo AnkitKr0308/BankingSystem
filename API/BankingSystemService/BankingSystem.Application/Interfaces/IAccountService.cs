@@ -12,9 +12,9 @@ namespace BankingSystem.Application.Interfaces
     public interface IAccountService
     {
         Task<AccountDetailsDTO?> GetAccountAsync(string accountNumber);
-        Task DepositAsync(CreateTransactionDTO transactionDTO);
-        Task WithdrawAsync (CreateTransactionDTO transactionDTO);
+        //Task DepositAsync(CreateTransactionDTO transactionDTO);
+        //Task WithdrawAsync (CreateTransactionDTO transactionDTO);
         Task<AccountDetailsDTO> CreateAccountAsync(CreateAccountDTO createAccountDTO);
-        Task DeleteAccount(string accountNumber);
+        Task CloseAccount(string accountNumber);
     }
 }

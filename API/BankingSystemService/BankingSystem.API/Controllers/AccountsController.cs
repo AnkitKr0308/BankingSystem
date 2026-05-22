@@ -32,25 +32,13 @@ namespace BankingSystem.API.Controllers
             return Ok(account);
         }
 
-        [HttpPost("deposit")]
-        public async Task<IActionResult> DepositAmount ([FromBody]CreateTransactionDTO depositDTO)
-        {
-            await _accountService.DepositAsync(depositDTO);
-            return Ok();
-        }
-
-        [HttpPost("withdraw")]
-        public async Task<IActionResult> WithdrawAmount([FromBody] CreateTransactionDTO withdrawDTO)
-        {
-            await _accountService.WithdrawAsync(withdrawDTO);
-            return Ok();
-        }
+        
 
         [Authorize(Roles ="Admin")]
-        [HttpPatch("deleteAccount")]
-        public async Task<IActionResult> DeleteAccount(string accountNumber)
+        [HttpPatch("closeAccount")]
+        public async Task<IActionResult> CloseAccount(string accountNumber)
         {
-            await _accountService.DeleteAccount(accountNumber);
+            await _accountService.CloseAccount(accountNumber);
             return Ok($"Account {accountNumber} deleted successfully");
         }
        

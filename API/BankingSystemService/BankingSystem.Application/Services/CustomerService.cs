@@ -6,6 +6,7 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,10 +17,17 @@ namespace BankingSystem.Application.Services
     {
         private readonly IRepository<Customer> _customer;
         private readonly IValidator<CreateCustomerDTO> _customerValidator;
-        public CustomerService(IRepository<Customer> customer, IValidator<CreateCustomerDTO> customerValidator)
+        private readonly IRepository<BankAccount> _account;
+        private readonly IUnitOfWork _unitOfWork;
+        public CustomerService(IRepository<Customer> customer, 
+            IValidator<CreateCustomerDTO> customerValidator,
+            IRepository<BankAccount> account,
+            IUnitOfWork unitOfWork)
         {
             _customer = customer;
             _customerValidator = customerValidator;
+            _account = account;
+            _unitOfWork = unitOfWork;
         }
         public async Task<CustomerDetailsDTO> CreateCustomerAsync(CreateCustomerDTO customerDTO)
         {
@@ -35,11 +43,16 @@ namespace BankingSystem.Application.Services
                 Address=customerDTO.Address,
                 ZipCode=customerDTO.ZipCode,
                 PhoneNumber=customerDTO.PhoneNumber,
-                status=Status.Active
+                status=Status.Active,
+                DateOfBirth=customerDTO.DateOfBirth,
+                PanNumber=customerDTO.PanNumber,
+                AadharNumber=customerDTO.AadharNumber,
+                CreatedAt=DateTime.UtcNow,
+                UpdatedAt=DateTime.UtcNow
             };
 
             await _customer.AddAsync(customer);
-            await _customer.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return new CustomerDetailsDTO
             {
@@ -58,9 +71,16 @@ namespace BankingSystem.Application.Services
             if (customer == null)
                 throw new KeyNotFoundException($"Customer ID {customerId} not found");
 
+            var accounts = await _account.GetAllAsync(x=>x.CustomerId==customer.Id);
+
             customer.status = Status.Inactive;
 
-            await _customer.SaveChangesAsync();
+            foreach (var account in accounts)
+            {
+                account.Status = Status.Closed;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<CustomerDetailsDTO> GetCustomerDataAsync(string CustomerId)
@@ -105,8 +125,10 @@ namespace BankingSystem.Application.Services
             customer.Address = customerDTO.Address;
             customer.ZipCode = customerDTO.ZipCode;
             customer.PhoneNumber = customerDTO.PhoneNumber;
+            customer.DateOfBirth = customerDTO.DateOfBirth;
+            customer.UpdatedAt = DateTime.UtcNow;
 
-            await _customer.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return new CustomerDetailsDTO
             {

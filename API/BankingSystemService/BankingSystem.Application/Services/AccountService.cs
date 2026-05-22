@@ -21,11 +21,13 @@ namespace BankingSystem.Application.Services
         private readonly IValidator<CreateTransactionDTO> _transactionValidator;
         private readonly IValidator<CreateAccountDTO> _accountValidator;
         private readonly ICustomerService _customerService;
+        private readonly IUnitOfWork _unitOfWork;
         public AccountService(IAccountRepository account, 
                                 IRepository<Transaction> transaction, 
                                 IValidator<CreateTransactionDTO> transactionValidator,
                                 IValidator<CreateAccountDTO> accountValidator,
-                                ICustomerService customerService
+                                ICustomerService customerService,
+                                IUnitOfWork unitOfWork
                              )
         {
             _accountRepo = account;
@@ -33,6 +35,7 @@ namespace BankingSystem.Application.Services
             _transactionValidator = transactionValidator;
             _accountValidator = accountValidator;
             _customerService=customerService;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<AccountDetailsDTO> CreateAccountAsync(CreateAccountDTO createAccountDTO)
@@ -51,11 +54,11 @@ namespace BankingSystem.Application.Services
                 //AccountNumber = Guid.NewGuid().ToString()[..10],
                 AccountType = createAccountDTO.AccountType,
                 Balance = createAccountDTO.InitialDeposit,
-                status=Status.Active
+                Status=Status.Active
             };
 
             await _accountRepo.AddAsync(account);
-            await _accountRepo.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             if (createAccountDTO.InitialDeposit > 0)
             {
@@ -67,7 +70,7 @@ namespace BankingSystem.Application.Services
                 };
 
                 await _transactionRepo.AddAsync(transaction);
-                await _transactionRepo.SaveChangesAsync();
+                await _unitOfWork.SaveChangesAsync();
             }
 
             return new AccountDetailsDTO
@@ -78,61 +81,7 @@ namespace BankingSystem.Application.Services
             };
         }
 
-        public async Task DepositAsync(CreateTransactionDTO depositDTO)
-        {
-
-            var validationResult = await _transactionValidator.ValidateAsync(depositDTO);
-
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.Errors);
-
-            var account = await _accountRepo.FirstOrDefaultAsync(x=>x.AccountNumber==depositDTO.AccountNumber);
-
-            if (account==null)
-                throw new KeyNotFoundException($"Account Number {depositDTO.AccountNumber} does not exist");
-
-            
-            
-            account.Balance += depositDTO.Amount;
-            _accountRepo.Update(account);
-
-            var transaction = new Transaction
-            {
-                Amount= depositDTO.Amount,
-                TransactionType=TransactionType.Deposit,
-                BankAccountId = account.Id
-            };
-            await _transactionRepo.AddAsync(transaction);
-            await _accountRepo.SaveChangesAsync();
-        }
-
-        public async Task WithdrawAsync(CreateTransactionDTO withdrawDTO)
-        {
-            var validationResult = await _transactionValidator.ValidateAsync(withdrawDTO);
-
-            if (!validationResult.IsValid)
-                throw new ValidationException(validationResult.Errors);
-
-            var account = await _accountRepo.FirstOrDefaultAsync(x=>x.AccountNumber==withdrawDTO.AccountNumber);
-
-            if (account == null)
-                throw new KeyNotFoundException($"Account Number {withdrawDTO.AccountNumber} does not exist");
-
-            if (withdrawDTO.Amount > account.Balance)
-                throw new InvalidOperationException("Insufficient Balance");
-
-            account.Balance -= withdrawDTO.Amount;
-            _accountRepo.Update(account);
-
-            await _transactionRepo.AddAsync(new Transaction
-            {
-                Amount = withdrawDTO.Amount,
-                TransactionType = TransactionType.Withdraw,
-                BankAccountId = account.Id
-            });
-
-            await _accountRepo.SaveChangesAsync();
-        }
+        
 
         public async Task<AccountDetailsDTO?> GetAccountAsync(string accountNumber)
         {
@@ -167,16 +116,16 @@ namespace BankingSystem.Application.Services
             };
         }
 
-        public async Task DeleteAccount(string accountNumber)
+        public async Task CloseAccount(string accountNumber)
         {
             var account = await _accountRepo.GetAccountDetailsAsync(accountNumber);
 
             if (account == null)
                 throw new KeyNotFoundException($"Account number {accountNumber} not found");
 
-            account.status = Status.Inactive;
+            account.Status = Status.Closed;
 
-            await _accountRepo.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
        
     }

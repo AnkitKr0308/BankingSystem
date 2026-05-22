@@ -28,11 +28,11 @@ namespace BankingSystem.API.Controllers
         }
 
         [Authorize(Roles ="Admin")]
-        [HttpPatch("deleteCustomer")]
-        public async Task<IActionResult> DeleteCustomer([FromQuery]string customerId)
+        [HttpPatch("disableCustomer")]
+        public async Task<IActionResult> DisableCustomer([FromQuery]string customerId)
         {
             await _customerService.DisableCustomer(customerId);
-            return Ok($"Customer {customerId} deleted successfully");
+            return Ok($"Customer {customerId} and all associated accounts deleted successfully.");
         }
 
         [HttpGet("customer/{customerId}")]

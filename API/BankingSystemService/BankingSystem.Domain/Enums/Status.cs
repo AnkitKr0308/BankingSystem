@@ -9,6 +9,9 @@ namespace BankingSystem.Domain.Enums
     public enum Status
     {
         Inactive=0,
-        Active=1
+        Active=1,
+        Frozen=2,
+        Locked=3,
+        Closed=4
     }
 }

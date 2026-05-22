@@ -16,6 +16,7 @@ namespace BankingSystem.Application.DTOs.Customer
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public string ZipCode { get; set; }
+        public DateOnly DateOfBirth { get; set; }
         public List<CustomerAccountDTO> Accounts { get; set; } = new();
 
     }

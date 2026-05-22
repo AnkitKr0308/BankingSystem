@@ -10,6 +10,8 @@ namespace BankingSystem.Domain.Enums
     {
         Deposit = 1,
         Withdraw = 2,
-        Transfer = 3
+        Debit=3,
+        Credit=4,
+        Transfer = 5
     }
 }

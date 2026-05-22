@@ -2,6 +2,7 @@
 using BankingSystem.Domain.Entity;
 using BankingSystem.Infrastructure.Data.DbContext;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace BankingSystem.Infrastructure.Repository
     {
         private readonly BankingDbContext _context;
         private readonly DbSet<T> _dbSet;
+        private IDbContextTransaction _transaction;
         public Repository(BankingDbContext context)
         {
             _context = context;
@@ -35,9 +37,16 @@ namespace BankingSystem.Infrastructure.Repository
             return await _dbSet.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
         {
-           return await _dbSet.ToListAsync();
+            IQueryable<T> query = _dbSet;
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<T?> GetByIdAsync(int id)
@@ -45,16 +54,32 @@ namespace BankingSystem.Infrastructure.Repository
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
-        }
+        //public  Task SaveChangesAsync()
+        //{
+        //    return _context.SaveChangesAsync();
+        //}
 
         public void Update(T entity)
         {
             _dbSet.Update(entity);
         }
 
-        
+        //public async Task BeginTransactionAsync()
+        //{
+        //    _transaction = await _context.Database.BeginTransactionAsync();
+        //}
+
+        //public async Task CommitAsync()
+        //{
+        //    await _transaction.CommitAsync();
+        //    await _transaction.DisposeAsync();
+        //}
+
+        //public async Task RollbackAsync()
+        //{
+        //    await _transaction.RollbackAsync();
+        //    await _transaction.DisposeAsync();
+        //}
+
     }
 }

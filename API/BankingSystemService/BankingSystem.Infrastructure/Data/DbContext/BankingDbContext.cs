@@ -37,6 +37,9 @@ namespace BankingSystem.Infrastructure.Data.DbContext
                 entity.Property(x => x.AccountNumber)
                 .IsRequired()
                 .HasDefaultValueSql("NEXT VALUE FOR AccountNumberSequence");
+
+                entity.Property(x => x.Id)
+                .UseIdentityColumn(seed: 1000, increment: 1);
             });
 
 
@@ -48,6 +51,9 @@ namespace BankingSystem.Infrastructure.Data.DbContext
                 entity.Property(x=>x.TransactionID)
                 .IsRequired()
                 .HasDefaultValueSql("NEXT VALUE FOR TransactionIdSequence");
+
+                entity.Property(x => x.Id)
+                .UseIdentityColumn(seed: 1000, increment: 1);
             });
                 
 
@@ -65,6 +71,9 @@ namespace BankingSystem.Infrastructure.Data.DbContext
                 entity.Property(x => x.CustomerId)
                 .HasDefaultValueSql("NEXT VALUE FOR CustomerIdSequence")
                 .IsRequired();
+
+                entity.Property(x => x.Id)
+                .UseIdentityColumn(seed: 1000, increment: 1);
             });
 
             modelBuilder.HasSequence<long>("CustomerIdSequence")

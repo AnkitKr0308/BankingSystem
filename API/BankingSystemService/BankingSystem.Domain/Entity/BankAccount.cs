@@ -8,7 +8,7 @@ namespace BankingSystem.Domain.Entity
         public string AccountNumber { get; set; }
         public BankAccountType AccountType { get; set; }
         public decimal Balance { get; set; }
-        public Status status { get; set; }
+        public Status Status { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();

@@ -62,7 +62,7 @@ namespace BankingSystem.Infrastructure.Authentication
             await _dbContext.RefreshTokens.AddAsync(new RefreshToken
             {
                 Token=refreshToken,
-                Expires=DateTime.UtcNow.AddHours(1),
+                Expires=DateTime.UtcNow.AddDays(1),
                 isRevoked=false,
                 UserId=user.Id
             });
